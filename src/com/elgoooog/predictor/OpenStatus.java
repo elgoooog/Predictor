@@ -6,5 +6,5 @@ package com.elgoooog.predictor;
  *         Time: 8:45 PM
  */
 public enum OpenStatus {
-    OPEN, TOO_LOCALIZED;
+    OPEN, OFF_TOPIC, NOT_CONSTRUCTIVE, NOT_A_REAL_QUESTION, TOO_LOCALIZED;
 }
