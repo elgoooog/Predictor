@@ -1,7 +1,11 @@
 package com.elgoooog.predictor;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.Reader;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,6 +33,7 @@ public class TrainerReader {
 
         final BufferedReader reader = new BufferedReader(inReader);
         final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        final DateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
 
         //consume first line
         reader.readLine();
@@ -36,14 +41,14 @@ public class TrainerReader {
         String line;
         while((line = reader.readLine()) != null)
         {
-            String[] parts = line.split(",");
+            String[] parts = line.split(",", -1);
 
             //System.out.println(parts[0]);
 
             final long postId = Long.parseLong(parts[0]);
-            final Date postCreationDate = dateFormat.parse(parts[1]);
+            final Date postCreationDate = parseDate(parts[1], dateFormat, dateFormat2);
             final long ownerId = Long.parseLong(parts[2]);
-            final Date ownerCreationDate = dateFormat.parse(parts[3]);
+            final Date ownerCreationDate = parseDate(parts[3], dateFormat, dateFormat2);
             final int repAtPostCreation = Integer.parseInt(parts[4]);
             final int ownerUndeletedAnswerCountAtPostTime = Integer.parseInt(parts[5]);
 
@@ -60,8 +65,11 @@ public class TrainerReader {
                         partsIndex++;
                         if(partsIndex == parts.length) {
                             line = reader.readLine();
-                            parts = line.split(",");
+                            parts = line.split(",", -1);
                             partsIndex = 0;
+                            titleBuilder.append("\n");
+                        } else {
+                            titleBuilder.append(",");
                         }
                         temp = parts[partsIndex];
                         from = 0;
@@ -71,7 +79,7 @@ public class TrainerReader {
                     titleBuilder.append(temp.substring(from, index));
 
                     int count = 0;
-                    while(temp.charAt(index) == '\"') {
+                    while(index < temp.length() && temp.charAt(index) == '\"') {
                         count++;
                         index++;
                     }
@@ -105,7 +113,7 @@ public class TrainerReader {
                         partsIndex++;
                         if(partsIndex == parts.length) {
                             line = reader.readLine();
-                            parts = line.split(",");
+                            parts = line.split(",", -1);
                             partsIndex = 0;
                             markdownBuilder.append("\n");
                         } else {
@@ -165,7 +173,7 @@ public class TrainerReader {
 
             Date postClosedDate = null;
             if(parts[partsIndex] != null && !"".equals(parts[partsIndex])) {
-                postClosedDate = dateFormat.parse(parts[partsIndex]);
+                postClosedDate = parseDate(parts[partsIndex], dateFormat, dateFormat2);
             }
             partsIndex++;
 
@@ -177,5 +185,16 @@ public class TrainerReader {
         reader.close();
 
         return data;
+    }
+
+    private Date parseDate(final String dateString, final DateFormat... dateFormats) {
+        for(DateFormat dateFormat : dateFormats) {
+            try {
+                return dateFormat.parse(dateString);
+            } catch(ParseException e) {
+                //do nothing
+            }
+        }
+        throw new RuntimeException("no date formatted");
     }
 }

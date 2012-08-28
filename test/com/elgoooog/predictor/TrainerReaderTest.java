@@ -21,5 +21,7 @@ public class TrainerReaderTest {
     @Test
     public void testRead() throws Exception {
         final List<TrainData> trainDatas = trainerReader.read ("S:\\competition\\stackoverflow\\train-sample.csv");
+
+        System.out.println("Train data size: " + trainDatas.size());
     }
 }
