@@ -12,7 +12,7 @@ public class OwnerRepAtPostCreation extends Feature {
         return trainData.getReputationAtPostCreation();
     }
 
-    public static class Open_Range50
+    public static class Open_Range50Rep
     {
         private final static double a = -4.5624955366567554E-01;
         private final static double b = 4.2261013079793942E-05;
@@ -24,7 +24,7 @@ public class OwnerRepAtPostCreation extends Feature {
     	}
     }
 
-    public static class NotRealQuestion_Range50
+    public static class NotRealQuestion_Range50Rep
     {
         private static final double a = -1.4335592033613648E+04;
         private static final double b = -5.1517113591752561E-01;
@@ -36,7 +36,7 @@ public class OwnerRepAtPostCreation extends Feature {
         }
     }
 
-    public static class NotConstructive_Range50
+    public static class NotConstructive_Range50Rep
     {
         private static final double a = -6.2375410246371670E+04;
         private static final double b = 1.5057052800958093E+00;
@@ -48,7 +48,7 @@ public class OwnerRepAtPostCreation extends Feature {
         }
     }
 
-    public static class OffTopic_Range50
+    public static class OffTopic_Range50Rep
     {
         private static final double a = -5.6460930242813680E+04;
         private static final double b = 1.4241302598671595E+00;
@@ -60,7 +60,7 @@ public class OwnerRepAtPostCreation extends Feature {
         }
     }
 
-    public static class TooLocalized_Range50
+    public static class TooLocalized_Range50Rep
     {
         private static final double a = -6.7888828165347135E+04;
         private static final double b = 1.3782913819733238E+00;

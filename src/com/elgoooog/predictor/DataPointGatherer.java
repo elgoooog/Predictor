@@ -13,18 +13,16 @@ import java.util.TreeMap;
  *         Time: 11:09 PM
  */
 public class DataPointGatherer {
-    public Map<OpenStatus, Map<Integer, Integer>> gatherDataPoints(Feature feature, int range) throws Exception {
-        List<TrainData> trainDatas = new TrainerReader().read ("S:\\competition\\stackoverflow\\train-sample.csv");
-
+    public Map<OpenStatus, Map<Long, Integer>> gatherDataPoints(List<TrainData> datas, Feature feature, long range) throws Exception {
         range = range < 1 ? 1 : range;
 
-        Map<OpenStatus, Map<Integer, Integer>> out = new HashMap<OpenStatus, Map<Integer, Integer>>();
+        Map<OpenStatus, Map<Long, Integer>> out = new HashMap<OpenStatus, Map<Long, Integer>>();
         for(OpenStatus currentStatus : OpenStatus.values()) {
-            Map<Integer, Integer> countMap = new TreeMap<Integer, Integer>();
+            Map<Long, Integer> countMap = new TreeMap<Long, Integer>();
             out.put(currentStatus, countMap);
 
-            for(TrainData data : trainDatas) {
-                int val = (int)feature.getValue(data) / range;
+            for(TrainData data : datas) {
+                long val = (long)feature.getValue(data) / range;
                 int incDec = data.getOpenStatus() == currentStatus ? 1 : -1;
 
                 Integer count = countMap.get(val);
