@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -184,6 +186,45 @@ public class TrainerReader {
 
         reader.close();
 
+        return data;
+    }
+
+    public List<TrainData> read(ResultSet rs)
+    {
+        final DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        final DateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
+        final List<TrainData> data = new ArrayList<TrainData>();
+        try {
+            while(rs.next())
+            {
+                final long postId = rs.getLong("POSTID");
+                final Date postCreationDate = parseDate(rs.getString("POSTCREATIONDATE"), dateFormat, dateFormat2);
+                final long ownerId = rs.getLong("OWNERUSERID");
+                final Date ownerCreationDate = parseDate(rs.getString("OWNERCREATIONDATE"), dateFormat, dateFormat2);
+                final int repAtPostCreation = rs.getInt("REPUTATIONATPOSTCREATION");
+                final int ownerUndeletedAnswerCountAtPostTime = rs.getInt("OWNERUNDELETEDANSWERCOUNTATPOSTTIME");
+                final String title = rs.getString("TITLE");
+                final String markdown = rs.getString("BODYMARKDOWN");
+                List<String> tags = new ArrayList<String>();
+                for(int i=1; i<6; i++)
+                {
+                    if(rs.getString("TAG" + i) != null && !rs.getString("TAG" + i).equals(""))
+                    {
+                        tags.add(rs.getString("TAG" + i));
+                    }
+                }
+                Date postClosedDate = null;
+                if(rs.getString("POSTCLOSEDDATE") != null)
+                {
+                    postClosedDate = parseDate(rs.getString("POSTCLOSEDDATE"), dateFormat, dateFormat2);
+                }
+                final OpenStatus openStatus = OpenStatus.valueOf(rs.getString("OPENSTATUS").toUpperCase().replaceAll(" ", "_"));
+
+                data.add(new TrainData(postId, postCreationDate, ownerId, ownerCreationDate, repAtPostCreation, ownerUndeletedAnswerCountAtPostTime, title, markdown, tags, postClosedDate, openStatus));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getStackTrace());
+        }
         return data;
     }
 

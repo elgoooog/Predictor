@@ -58,8 +58,5 @@ public class Tester {
         System.out.println(TitleNoiseWordPercentage.OffTopic_Range1Percent.calc(10));
         System.out.println(TitleNoiseWordPercentage.TooLocalized_Range1Percent.calc(10));
     }
-    @Test
-    public void testYetAnotherEquation2() throws Exception {
-        System.out.println("Testing my awesomeness.... yep I am awesome.");
-    }
+
 }

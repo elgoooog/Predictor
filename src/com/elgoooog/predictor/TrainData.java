@@ -38,6 +38,16 @@ public class TrainData {
         this.openStatus = openStatus;
     }
 
+    @Override
+    public String toString()
+    {
+        return "PostID: " + postId +"|" + "Post Creation Date: " + postCreationDate +"|" + "UserID: " + ownerUserId +"|" +
+                "UserCreationDate: " + ownerCreationDate +"|" + "Rep at Creation: " + reputationAtPostCreation +"|" +
+                "Owner Undeleted Count@Post: " + ownerUndeletedAnswerCountAtPostTime +"|" +
+                "Title: " + title +"|" + "Body Markdown: " + bodyMarkdown +"|" + "Tags" + tags +"|" +
+                "Closed Date" + postClosedDate +"|" + "Status" + openStatus;
+    }
+
     public long getPostId() {
         return postId;
     }
