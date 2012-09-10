@@ -1,5 +1,6 @@
 package com.elgoooog.predictor.feature;
 
+import com.elgoooog.predictor.OpenStatus;
 import com.elgoooog.predictor.TrainData;
 
 /**
@@ -10,6 +11,34 @@ import com.elgoooog.predictor.TrainData;
 public class OwnerRepAtPostCreation extends Feature {
     public double getValue(TrainData trainData) {
         return trainData.getReputationAtPostCreation();
+    }
+
+    @Override
+    public double getNormalizedValue(OpenStatus status, TrainData trainData) {
+        double val = getValue(trainData)/50d;
+        double result;
+        switch(status) {
+            case TOO_LOCALIZED:
+                result = TooLocalized_Range50Rep.calc(val);
+                break;
+            case NOT_CONSTRUCTIVE:
+                result = NotConstructive_Range50Rep.calc(val);
+                break;
+            case OFF_TOPIC:
+                result = OffTopic_Range50Rep.calc(val);
+                break;
+            case NOT_A_REAL_QUESTION:
+                result = NotRealQuestion_Range50Rep.calc(val);
+                break;
+            default:
+                result = Open_Range50Rep.calc(val);
+        }
+        return result*getWeight(status);
+    }
+
+    @Override
+    public double getWeight(OpenStatus openStatus) {
+        return 1.0;
     }
 
     public static class Open_Range50Rep

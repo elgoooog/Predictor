@@ -1,5 +1,6 @@
 package com.elgoooog.predictor.feature;
 
+import com.elgoooog.predictor.OpenStatus;
 import com.elgoooog.predictor.TrainData;
 
 /**
@@ -9,6 +10,10 @@ import com.elgoooog.predictor.TrainData;
  */
 public abstract class Feature {
     public abstract double getValue(TrainData trainData);
+
+    public abstract double getNormalizedValue(OpenStatus status, TrainData trainData);
+
+    public abstract double getWeight(OpenStatus status);
 
     public final String getName() {
         Class<? extends Feature> clazz = getClass();

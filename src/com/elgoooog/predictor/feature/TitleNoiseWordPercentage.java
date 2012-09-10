@@ -1,5 +1,6 @@
 package com.elgoooog.predictor.feature;
 
+import com.elgoooog.predictor.OpenStatus;
 import com.elgoooog.predictor.TrainData;
 
 import java.util.Arrays;
@@ -19,6 +20,34 @@ public class TitleNoiseWordPercentage extends Feature {
             "the","their","them","then","there","these","they","this","those","through","to","too","under","up",
             "very","was","way","we","well","were","what","where","which","while","who","with","would","you","your","a",
             "b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","$","1","2","3","4","5","6","7","8","9","0","_");
+
+    @Override
+    public double getNormalizedValue(OpenStatus status, TrainData trainData) {
+        double val = getValue(trainData);
+        double result;
+        switch(status) {
+            case TOO_LOCALIZED:
+                result = TooLocalized_Range1Percent.calc(val);
+                break;
+            case NOT_CONSTRUCTIVE:
+                result = NotConstructive_Range1Percent.calc(val);
+                break;
+            case OFF_TOPIC:
+                result = OffTopic_Range1Percent.calc(val);
+                break;
+            case NOT_A_REAL_QUESTION:
+                result = NotRealQuestion_Range1Percent.calc(val);
+                break;
+            default:
+                result = Open_Range1Percent.calc(val);
+        }
+        return result*getWeight(status);
+    }
+
+    @Override
+    public double getWeight(OpenStatus status) {
+        return 0.1;
+    }
 
     @Override
     public double getValue(TrainData trainData) {

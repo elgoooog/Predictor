@@ -1,5 +1,6 @@
 package com.elgoooog.predictor.feature;
 
+import com.elgoooog.predictor.OpenStatus;
 import com.elgoooog.predictor.TrainData;
 
 /**
@@ -10,6 +11,34 @@ import com.elgoooog.predictor.TrainData;
 
 @FeatureName("JoinToQuestionTime")
 public class FromJoinToQuestionTime extends Feature {
+    @Override
+    public double getNormalizedValue(OpenStatus status, TrainData trainData) {
+        double val = getValue(trainData)/86400000d;
+        double result;
+        switch(status) {
+            case TOO_LOCALIZED:
+                result = TooLocalized_Range1Day.calc(val);
+                break;
+            case NOT_CONSTRUCTIVE:
+                result = NotConstructive_Range1Day.calc(val);
+                break;
+            case OFF_TOPIC:
+                result = OffTopic_Range1Day.calc(val);
+                break;
+            case NOT_A_REAL_QUESTION:
+                result = NotRealQuestion_Range1Day.calc(val);
+                break;
+            default:
+                result = Open_Range1Day.calc(val);
+        }
+        return result*getWeight(status);
+    }
+
+    @Override
+    public double getWeight(OpenStatus status) {
+        return 1.0;
+    }
+
     public double getValue(TrainData trainData) {
         return trainData.getPostCreationDate().getTime() - trainData.getOwnerCreationDate().getTime();
     }
@@ -46,7 +75,7 @@ public class FromJoinToQuestionTime extends Feature {
 
         public static double calc(double x)
         {
-            return a * Math.exp(b/(x+c));
+            return a * Math.exp(b / (x + c));
         }
     }
 
@@ -58,7 +87,7 @@ public class FromJoinToQuestionTime extends Feature {
 
         public static double calc(double x)
         {
-            return a * Math.exp(b/(x+c));
+            return a * Math.exp(b / (x + c));
         }
     }
 
