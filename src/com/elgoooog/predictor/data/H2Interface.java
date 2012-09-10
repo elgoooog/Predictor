@@ -1,6 +1,7 @@
 package com.elgoooog.predictor.data;
 
 import java.sql.*;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -107,15 +108,14 @@ public class H2Interface {
 
     public void createTables(String csvLocation)
     {
-        executeQuery("CREATE TABLE TRAINDATA(POSTID LONG PRIMARY KEY, POSTCREATIONDATE VARCHAR(30), OWNERUSERID LONG, " +
-        "OWNERCREATIONDATE  VARCHAR(30), REPUTATIONATPOSTCREATION INT, OWNERUNDELETEDANSWERCOUNTATPOSTTIME INT, TITLE VARCHAR(MAX), " +
-        "BODYMARKDOWN VARCHAR(MAX), TAG1 VARCHAR(50), TAG2 VARCHAR(50), TAG3 VARCHAR(50), TAG4 VARCHAR(50), TAG5 VARCHAR(50), " +
-        "POSTCLOSEDDATE  VARCHAR(30), OPENSTATUS VARCHAR(20)) AS SELECT * FROM CSVREAD('" + csvLocation + "') ");
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("csvLocation", csvLocation);
+        executeQuery(SqlReader.readFromFile("sql/createTrainData.sql"), params);
     }
 
     public void clearDatabase()
     {
-        executeQuery("DELETE FROM TRAINDATA");
+        executeQuery(SqlReader.readFromFile("sql/deleteTrainData.sql"));
     }
 
     public void closeConnection()

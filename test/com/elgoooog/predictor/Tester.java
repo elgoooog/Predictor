@@ -1,6 +1,7 @@
 package com.elgoooog.predictor;
 
 import com.elgoooog.predictor.data.H2Interface;
+import com.elgoooog.predictor.data.SqlReader;
 import com.elgoooog.predictor.feature.FromJoinToQuestionTime;
 import com.elgoooog.predictor.feature.OwnerRepAtPostCreation;
 import com.elgoooog.predictor.feature.TitleNoiseWordPercentage;
@@ -120,8 +121,14 @@ public class Tester {
     }
 
     @Test
-    public void testSomething() {
+    public void testEl() {
         H2Interface h2 = new H2Interface("");
         h2.executeQuery("hola sucka! ${hi there} some more here...", Collections.singletonMap("hi there", "hola again!"));
+    }
+
+    @Test
+    public void testSqlReader() {
+        System.out.println(SqlReader.readFromFile("sql/deleteTrainData.sql"));
+        System.out.println(SqlReader.readFromFile("sql/createTrainData.sql"));
     }
 }
