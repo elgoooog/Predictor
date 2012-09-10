@@ -1,10 +1,12 @@
 package com.elgoooog.predictor;
 
+import com.elgoooog.predictor.data.H2Interface;
 import com.elgoooog.predictor.feature.FromJoinToQuestionTime;
 import com.elgoooog.predictor.feature.OwnerRepAtPostCreation;
 import com.elgoooog.predictor.feature.TitleNoiseWordPercentage;
 import org.junit.Test;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -117,4 +119,9 @@ public class Tester {
         System.out.println(TitleNoiseWordPercentage.TooLocalized_Range1Percent.calc(10));
     }
 
+    @Test
+    public void testSomething() {
+        H2Interface h2 = new H2Interface("");
+        h2.executeQuery("hola sucka! ${hi there} some more here...", Collections.singletonMap("hi there", "hola again!"));
+    }
 }

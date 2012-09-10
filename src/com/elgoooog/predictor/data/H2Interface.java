@@ -1,6 +1,7 @@
 package com.elgoooog.predictor.data;
 
 import java.sql.*;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,6 +12,7 @@ import java.sql.*;
  */
 public class H2Interface {
     private Connection conn = null;
+
     public H2Interface(String dbLocation)
     {
         try {
@@ -20,13 +22,14 @@ public class H2Interface {
                 conn = DriverManager.getConnection("jdbc:h2:" + dbLocation);
 
             } catch (SQLException e) {
-                System.out.println(e.getStackTrace());
+                e.printStackTrace();
             }
 
         } catch (ClassNotFoundException e) {
-            System.out.println(e.getStackTrace());
+            e.printStackTrace();
         }
     }
+
     public void executeQuery(String query)
     {
         Statement statement = null;
@@ -34,15 +37,32 @@ public class H2Interface {
             statement = conn.createStatement();
             statement.execute(query);
         } catch (Exception e) {
-            System.out.println(e.getStackTrace());
+            e.printStackTrace();
         } finally {
             try {
-                statement.close();
+                if(statement != null){
+                    statement.close();
+                }
             } catch (Exception e) {
-                System.out.println(e.getStackTrace());
+                e.printStackTrace();
             }
         }
     }
+
+    public void executeQuery(String query, Map<String, String> params) {
+        int index = query.indexOf("${");
+        while(index != -1) {
+
+            int endIndex = query.indexOf('}', index);
+            String param = query.substring(index + 2, endIndex);
+            String replacement = params.get(param);
+            query = query.replaceFirst("\\$\\{" + param + "\\}", replacement);
+            index = query.indexOf("${", endIndex);
+        }
+
+        executeQuery(query);
+    }
+
     public ResultSet runSelectQuery(String query)
     {
         ResultSet resultSet = null;
@@ -51,7 +71,7 @@ public class H2Interface {
             statement = conn.createStatement();
             resultSet = statement.executeQuery(query);
         } catch (Exception e) {
-            System.out.println(e.toString());
+            e.printStackTrace();
         }
         return resultSet;
     }
@@ -81,7 +101,7 @@ public class H2Interface {
                 System.out.println();
             }
         } catch (SQLException e) {
-            System.out.println(e.toString());
+            e.printStackTrace();
         }
     }
 
@@ -92,10 +112,12 @@ public class H2Interface {
         "BODYMARKDOWN VARCHAR(MAX), TAG1 VARCHAR(50), TAG2 VARCHAR(50), TAG3 VARCHAR(50), TAG4 VARCHAR(50), TAG5 VARCHAR(50), " +
         "POSTCLOSEDDATE  VARCHAR(30), OPENSTATUS VARCHAR(20)) AS SELECT * FROM CSVREAD('" + csvLocation + "') ");
     }
+
     public void clearDatabase()
     {
         executeQuery("DELETE FROM TRAINDATA");
     }
+
     public void closeConnection()
     {
         try
@@ -104,8 +126,7 @@ public class H2Interface {
         }
         catch (Exception e)
         {
-            System.out.println(e.toString());
+            e.printStackTrace();
         }
     }
-
 }
