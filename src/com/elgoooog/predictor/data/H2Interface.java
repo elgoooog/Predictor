@@ -56,9 +56,9 @@ public class H2Interface {
 
             int endIndex = query.indexOf('}', index);
             String param = query.substring(index + 2, endIndex);
+            index = query.indexOf("${", endIndex);
             String replacement = params.get(param);
             query = query.replaceFirst("\\$\\{" + param + "\\}", replacement);
-            index = query.indexOf("${", endIndex);
         }
 
         executeQuery(query);
