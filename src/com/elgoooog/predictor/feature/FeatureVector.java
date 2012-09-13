@@ -16,8 +16,12 @@ public class FeatureVector {
         featureValues = Collections.unmodifiableMap(featureScores);
     }
 
+    public Map<String, Double> getFeatures() {
+        return featureValues;
+    }
+
     public static class Builder {
-        private Map<String, Double> featureVals = new HashMap<String, Double>();
+        protected Map<String, Double> featureVals = new HashMap<String, Double>();
 
         public Builder addFeature(final String featureName, final double value) {
             featureVals.put(featureName, value);

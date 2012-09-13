@@ -131,4 +131,13 @@ public class Tester {
         System.out.println(SqlReader.readFromFile("sql/deleteTrainData.sql"));
         System.out.println(SqlReader.readFromFile("sql/createTrainData.sql"));
     }
+
+    @Test
+    public void doTrain() {
+        new Trainer(new TrainerReader(),
+                new TitleNoiseWordPercentage(),
+                new FromJoinToQuestionTime(),
+                new OwnerRepAtPostCreation())
+                .train("S:\\competition\\stackoverflow\\train-sample.csv", OpenStatus.OPEN);
+    }
 }
