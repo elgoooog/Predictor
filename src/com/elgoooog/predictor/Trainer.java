@@ -54,18 +54,18 @@ public class Trainer {
                 featureVectors.add(featureVectorBuilder.build());
             }
 
-            writeFile(featureVectors);
+            writeFile(featureVectors, openStatus);
         } catch(final Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void writeFile(List<TrainingFeatureVector> featureVectors) throws IOException {
+    private void writeFile(List<TrainingFeatureVector> featureVectors, OpenStatus openStatus) throws IOException {
         BufferedWriter out = null;
         BufferedWriter key = null;
         try {
-            out = new BufferedWriter(new FileWriter(new File("train.out")));
-            key = new BufferedWriter(new FileWriter(new File("train.key")));
+            out = new BufferedWriter(new FileWriter(new File("train_" + openStatus + ".out")));
+            key = new BufferedWriter(new FileWriter(new File("train_" + openStatus + ".key")));
 
             boolean keyNotWritten = true;
             for(TrainingFeatureVector vector : featureVectors) {
